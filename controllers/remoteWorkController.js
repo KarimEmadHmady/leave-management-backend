@@ -40,7 +40,7 @@ Dear ${request.userId.name},
 
 Your remote work request for ${new Date(request.date).toDateString()} has been APPROVED.
 
-📝 Admin Comment: ${request.adminComment || "No comment provided."}
+📝 HR Comment: ${request.adminComment || "No comment provided."}
 
 Status: ${emailStatusText}
 
@@ -67,7 +67,7 @@ Dear ${request.userId.name},
 
 Your remote work request for ${new Date(request.date).toDateString()} has been REJECTED.
 
-📝 Admin Comment: ${request.adminComment || "No comment provided."}
+📝 HR Comment: ${request.adminComment || "No comment provided."}
 
 Status: ${emailStatusText}
 

@@ -144,7 +144,7 @@ export const updateLeaveRequestStatus = async (req, res) => {
     
     Your leave request from ${new Date(leaveRequest.startDate).toDateString()} to ${new Date(leaveRequest.endDate).toDateString()} has been ${finalStatus.toUpperCase()}.
     
-    📝 Admin Comment: ${adminComment || "No comment provided."}
+    📝 HR Comment: ${adminComment || "No comment provided."}
     
     Status: ${emailStatusText}
     
