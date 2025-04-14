@@ -7,6 +7,8 @@ import { sendEmail } from "../services/emailService.js";
 import dotenv from "dotenv";
 
 dotenv.config();
+
+
 export const createLeaveRequest = async (req, res) => {
   const { leaveType, startDate, endDate, reason } = req.body;
   const userId = req.user.id;
@@ -15,6 +17,15 @@ export const createLeaveRequest = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
+    }
+
+    // التحقق إذا كان الموظف قد مر عليه 6 أشهر على الأقل
+    const hireDate = new Date(user.hireDate);
+    const currentDate = new Date();
+    const monthsEmployed = (currentDate.getFullYear() - hireDate.getFullYear()) * 12 + currentDate.getMonth() - hireDate.getMonth();
+
+    if (monthsEmployed < 6) {
+      return res.status(403).json({ message: "You must be employed for at least 6 months to request leave" });
     }
 
     let leaveBalance = user.leaveBalance[leaveType];
