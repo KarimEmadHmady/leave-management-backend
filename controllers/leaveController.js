@@ -1,5 +1,3 @@
-// controllers/leaveController.js
-
 import LeaveRequest from "../models/LeaveRequest.js";
 import User from "../models/User.js";
 import { sendEmail } from "../services/emailService.js";
@@ -7,7 +5,6 @@ import { sendEmail } from "../services/emailService.js";
 import dotenv from "dotenv";
 
 dotenv.config();
-
 
 export const createLeaveRequest = async (req, res) => {
   const { leaveType, startDate, endDate, reason } = req.body;
@@ -19,7 +16,6 @@ export const createLeaveRequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // التحقق إذا كان الموظف قد مر عليه 6 أشهر على الأقل
     const hireDate = new Date(user.hireDate);
     const currentDate = new Date();
     const monthsEmployed = (currentDate.getFullYear() - hireDate.getFullYear()) * 12 + currentDate.getMonth() - hireDate.getMonth();
@@ -46,13 +42,25 @@ export const createLeaveRequest = async (req, res) => {
     });
 
     await leaveRequest.save();
-    
-    const adminEmail = "karimemad2066@gmail.com";
+
+    const adminEmail = "karimemad2066@gmail.com";    
     sendEmail(
       adminEmail,
       "New Leave Request",
-      `A new leave request has been submitted by ${user.name}.`
+      `A new leave request has been submitted by ${user.name} from ${new Date(startDate).toDateString()} to ${new Date(endDate).toDateString()}.`
     );
+
+    const userMessageBody = `
+      Dear ${user.name},
+
+      Your leave request from ${new Date(startDate).toDateString()} to ${new Date(endDate).toDateString()} has been successfully submitted.
+
+      📝 Reason: ${reason || "No reason provided."}
+
+      Best regards,
+      HR System
+    `;
+    sendEmail(user.email, "Leave Request Submitted", userMessageBody);
 
     res
       .status(201)
@@ -153,7 +161,6 @@ export const updateLeaveRequestStatus = async (req, res) => {
     `;
     
     sendEmail(user.email, "Leave Request Status Update", messageBody);
-    
 
     res
       .status(200)

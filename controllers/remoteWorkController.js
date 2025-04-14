@@ -10,6 +10,27 @@ export const createRemoteWorkRequest = async (req, res) => {
       date,
       reason,
     });
+
+    const adminEmail = "karimemad2066@gmail.com";      
+    sendEmail(
+      adminEmail,
+      "New Remote Work Request",
+      `A new remote work request has been submitted by ${req.user.name} for the date ${new Date(date).toDateString()}.`
+    );
+
+    const messageBody = `
+      Dear ${req.user.name},
+
+      Your remote work request for ${new Date(date).toDateString()} has been successfully submitted. 
+
+      📝 Reason: ${reason || "No reason provided."}
+
+      Best regards,
+      HR System
+    `;
+
+    sendEmail(req.user.email, "Remote Work Request Submitted", messageBody);
+
     res.status(201).json(newRequest);
   } catch (err) {
     res.status(500).json({ message: "Something went wrong" });
@@ -36,18 +57,17 @@ export const approveRemoteWork = async (req, res) => {
 
   const emailStatusText = "✅ Approved";
   const messageBody = `
-Dear ${request.userId.name},
+    Dear ${request.userId.name},
 
-Your remote work request for ${new Date(request.date).toDateString()} has been APPROVED.
+    Your remote work request for ${new Date(request.date).toDateString()} has been APPROVED.
 
-📝 HR Comment: ${request.adminComment || "No comment provided."}
+    📝 HR Comment: ${request.adminComment || "No comment provided."}
 
-Status: ${emailStatusText}
+    Status: ${emailStatusText}
 
-Best regards,  
-HR System
-`;
-
+    Best regards,  
+    HR System
+  `;
   sendEmail(request.userId.email, "Remote Work Request Status Update", messageBody);
 
   res.json(request);
@@ -63,18 +83,17 @@ export const rejectRemoteWork = async (req, res) => {
 
   const emailStatusText = "❌ Rejected";
   const messageBody = `
-Dear ${request.userId.name},
+    Dear ${request.userId.name},
 
-Your remote work request for ${new Date(request.date).toDateString()} has been REJECTED.
+    Your remote work request for ${new Date(request.date).toDateString()} has been REJECTED.
 
-📝 HR Comment: ${request.adminComment || "No comment provided."}
+    📝 HR Comment: ${request.adminComment || "No comment provided."}
 
-Status: ${emailStatusText}
+    Status: ${emailStatusText}
 
-Best regards,  
-HR Aya Mohamed 
-`;
-
+    Best regards,  
+    HR Aya Mohamed 
+  `;
   sendEmail(request.userId.email, "Remote Work Request Status Update", messageBody);
 
   res.json(request);
