@@ -42,6 +42,8 @@ export const createLeaveRequest = async (req, res) => {
     });
 
     await leaveRequest.save();
+    await leaveRequest.populate('userId', 'name email');
+
 
     const adminEmail = "karimemad2066@gmail.com";    
     sendEmail(

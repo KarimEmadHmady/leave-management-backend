@@ -4,6 +4,7 @@ import authRoutes from "./routes/auth.js";
 import remoteWorkRoutes from "./routes/remoteWork.js";
 import leaveRoutes from "./routes/leaveRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import userDetailsRoutes from "./routes/userDetailsRoutes.js";
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -17,6 +18,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/remote", remoteWorkRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/user-details", userDetailsRoutes);
+
 
 app.get("/", (req, res) => {
     res.send("Server is up and running!");
