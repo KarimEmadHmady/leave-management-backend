@@ -30,7 +30,11 @@ router.post(
       const user = await User.findById(req.params.id);
       if (!user) return res.status(404).json({ message: "User not found" });
 
-      user.profileImage = req.file.path; 
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      user.profileImage = req.file.path;
       await user.save();
 
       res.status(200).json({
@@ -39,10 +43,11 @@ router.post(
       });
     } catch (err) {
       console.error("Upload error:", err);
-      res.status(500).json({ message: "Error uploading image" });
+      res.status(500).json({ message: "Error uploading image", error: err.message });
     }
   }
 );
+
 
 
 export default router;
