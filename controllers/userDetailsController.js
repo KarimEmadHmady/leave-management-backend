@@ -1,4 +1,3 @@
-// controllers/userDetailsController.js
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
@@ -7,10 +6,27 @@ export const updateUserDetails = async (req, res) => {
   const updates = { ...req.body };
 
   try {
-    // لو فيه باسورد، نعمله هاش قبل التحديث
     if (updates.password) {
       const salt = await bcrypt.genSalt(10);
       updates.password = await bcrypt.hash(updates.password, salt);
+    }
+
+    if (updates.employeeStatus === "resigned") {
+      if (!updates.resignationReason) {
+        return res.status(400).json({ message: "Resignation reason is required" });
+      }
+      if (!updates.resignationDate) {
+        return res.status(400).json({ message: "Resignation date is required" });
+      }
+    }
+
+    if (updates.employeeStatus === "active") {
+      updates.resignationReason = null;
+      updates.resignationDate = null;
+    }
+
+    if (!req.body.hasOwnProperty("employeeStatus")) {
+      delete updates.employeeStatus;
     }
 
     const user = await User.findByIdAndUpdate(userId, updates, {
@@ -29,16 +45,26 @@ export const updateUserDetails = async (req, res) => {
   }
 };
 
+
 export const createUserByAdmin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, employeeStatus, resignationReason } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // نعمل هاش للباسورد
+    if (employeeStatus === "resigned" && !resignationReason) {
+      return res.status(400).json({ message: "Resignation reason is required" });
+    }
+
+    if (employeeStatus === "active") {
+      req.body.resignationReason = null;
+    }
+
+    delete req.body.employeeStatus;   
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -52,39 +78,33 @@ export const createUserByAdmin = async (req, res) => {
   }
 };
 
-  export const deleteUser = async (req, res) => {
-    try {
-      const deleted = await User.findByIdAndDelete(req.params.id);
-      if (!deleted) return res.status(404).json({ message: "User not found" });
-  
-      res.status(200).json({ message: "User deleted successfully" });
-    } catch (err) {
-      res.status(500).json({ message: "Something went wrong" });
-    }
-  };
-  
+export const deleteUser = async (req, res) => {
+  try {
+    const deleted = await User.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "User not found" });
 
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
 
-  export const getAllUsers = async (req, res) => {
-    try {
-      const users = await User.find().select("-password");
-      res.status(200).json(users);
-    } catch (err) {
-      res.status(500).json({ message: "Server error" });
-    }
-  };
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-  
+export const getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-  export const getUserById = async (req, res) => {
-    try {
-      const user = await User.findById(req.params.id).select("-password");
-      if (!user) return res.status(404).json({ message: "User not found" });
-  
-      res.status(200).json(user);
-    } catch (err) {
-      res.status(500).json({ message: "Server error" });
-    }
-  };
-  
-  
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};

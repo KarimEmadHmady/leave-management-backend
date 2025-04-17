@@ -9,6 +9,38 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ["employee", "admin"], default: "employee" },
     hireDate: { type: Date, required: true },
+    employeeCode: { type: String,  unique: true },
+    employeeStatus: {
+      type: String,
+      enum: ["active", "resigned"],
+      default: "active"
+    },
+    resignationReason: {
+      type: String,
+      required: function () {
+        return this.employeeStatus === "resigned";
+      },
+      validate: {
+        validator: function(value) {
+          return this.employeeStatus !== "resigned" || (value && value.length > 0);
+        },
+        message: "Resignation reason is required if employment status is resigned."
+      }
+    },
+    resignationDate: {
+      type: Date,
+      required: function () {
+        return this.employeeStatus === "resigned";
+      },
+      validate: {
+        validator: function (value) {
+          return this.employeeStatus !== "resigned" || !!value;
+        },
+        message: "Resignation date is required if employment status is resigned."
+      }
+    },
+    
+
     contractStart: { type: Date },
     contractEnd: { type: Date },
     salary: { type: Number },
@@ -50,7 +82,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// ✅ Pre-save hook to hash password
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
@@ -58,7 +89,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// ✅ Method to compare passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
