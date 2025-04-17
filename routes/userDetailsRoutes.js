@@ -27,12 +27,20 @@ router.post(
   upload.single("profileImage"),
   async (req, res) => {
     try {
-      const user = await User.findById(req.params.id);
-      if (!user) return res.status(404).json({ message: "User not found" });
+      console.log("Upload request received");
 
       if (!req.file) {
+        console.log("No file received");
         return res.status(400).json({ message: "No file uploaded" });
       }
+
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        console.log("User not found");
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      console.log("Image uploaded to Cloudinary:", req.file.path);
 
       user.profileImage = req.file.path;
       await user.save();
@@ -43,10 +51,14 @@ router.post(
       });
     } catch (err) {
       console.error("Upload error:", err);
-      res.status(500).json({ message: "Error uploading image", error: err.message });
+      res.status(500).json({
+        message: "Error uploading image",
+        error: err.message,
+      });
     }
   }
 );
+
 
 
 
