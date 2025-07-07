@@ -20,8 +20,8 @@ export const createLeaveRequest = async (req, res) => {
     const currentDate = new Date();
     const monthsEmployed = (currentDate.getFullYear() - hireDate.getFullYear()) * 12 + currentDate.getMonth() - hireDate.getMonth();
 
-    if (monthsEmployed < 6) {
-      return res.status(403).json({ message: "You must be employed for at least 6 months to request leave" });
+    if (monthsEmployed < 3) {
+      return res.status(403).json({ message: "You must be employed for at least 3 months to request leave" });
     }
 
     let leaveBalance = user.leaveBalance[leaveType];

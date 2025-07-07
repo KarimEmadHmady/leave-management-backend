@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ["employee", "admin"], default: "employee" },
     hireDate: { type: Date, required: true },
-    employeeCode: { type: String,  unique: true },
+    employeeCode: { type: String, required: false },
     employeeStatus: {
       type: String,
       enum: ["active", "resigned"],
