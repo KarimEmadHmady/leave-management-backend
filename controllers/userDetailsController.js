@@ -14,7 +14,7 @@ export const updateUserDetails = async (req, res) => {
 
     // If the target user is admin, only allow self-edit
     if (targetUser.role === "admin" && req.user.id !== userId) {
-      return res.status(403).json({ message: "Admins can only edit their own account" });
+      return res.status(403).json({ message: "Admins can only edit their own account and account employees" });
     }
 
     if (updates.password) {
