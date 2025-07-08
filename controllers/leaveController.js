@@ -48,9 +48,9 @@ export const createLeaveRequest = async (req, res) => {
     const adminEmail = "karimemad2066@gmail.com";    
     sendEmail(
    adminEmail,
-  "New Leave Request",
-  `A new leave request has been submitted by ${user.name} from ${new Date(startDate).toDateString()} to ${new Date(endDate).toDateString()}.`,
-  `"${user.name} from " <${process.env.EMAIL_USER}>`
+      "New Leave Request",
+      `A new leave request has been submitted by ${user.name} from ${new Date(startDate).toDateString()} to ${new Date(endDate).toDateString()}.`,
+      `"${user.name} from " <${process.env.EMAIL_USER}>`
     );
 
     const userMessageBody = `
