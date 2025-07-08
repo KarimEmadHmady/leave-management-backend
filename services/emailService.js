@@ -9,6 +9,7 @@ dotenv.config();
         user: process.env.EMAIL_USER, 
         pass: process.env.EMAIL_PASS, 
     },
+    pool: true,
     tls: {
         rejectUnauthorized: false,  
     },
@@ -30,5 +31,6 @@ dotenv.config();
         } else {
         console.log('Email sent:', info.response);
         }
+        transporter.close();
     });
     };
