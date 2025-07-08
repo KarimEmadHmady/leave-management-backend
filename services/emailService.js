@@ -17,12 +17,12 @@ dotenv.config();
     });
 
     export const sendEmail = (to, subject, text) => {
-    const mailOptions = {
-        from: `"UWD" <${process.env.EMAIL_USER}>`, 
-        to: to,
-        subject: subject,
-        text: text,
-    };
+  const mailOptions = {
+    from,
+    to,
+    subject,
+    text,
+  };
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
