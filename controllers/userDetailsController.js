@@ -6,6 +6,17 @@ export const updateUserDetails = async (req, res) => {
   const updates = { ...req.body };
 
   try {
+    // Fetch the target user to check their role
+    const targetUser = await User.findById(userId);
+    if (!targetUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If the target user is admin, only allow self-edit
+    if (targetUser.role === "admin" && req.user.id !== userId) {
+      return res.status(403).json({ message: "Admins can only edit their own account" });
+    }
+
     if (updates.password) {
       const salt = await bcrypt.genSalt(10);
       updates.password = await bcrypt.hash(updates.password, salt);
