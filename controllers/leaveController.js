@@ -45,7 +45,7 @@ export const createLeaveRequest = async (req, res) => {
     await leaveRequest.populate('userId', 'name email');
 
 
-    const adminEmail = "karimemad2066@gmail.com";    
+    const adminEmail = "salmaghanem146@gmail.com";    
     sendEmail(
       adminEmail,
       "New Leave Request",
@@ -55,7 +55,8 @@ export const createLeaveRequest = async (req, res) => {
     const userMessageBody = `
       Dear ${user.name},
 
-      Your leave request from ${new Date(startDate).toDateString()} to ${new Date(endDate).toDateString()} has been successfully submitted.
+      Your leave request from ${new Date(startDate).toDateString()} to ${new Date(endDate).toDateString()}
+      has been successfully submitted.
 
       📝 Reason: ${reason || "No reason provided."}
 

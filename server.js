@@ -14,6 +14,7 @@ app.use(express.json());
 
 app.use(cors({
   origin: "https://hr-system-uwd.netlify.app",
+//   origin: "http://localhost:3001",
   credentials: true
 }));
 

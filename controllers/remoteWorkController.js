@@ -14,7 +14,7 @@ export const createRemoteWorkRequest = async (req, res) => {
     await newRequest.populate('userId', 'name email');
 
 
-    const adminEmail = "karimemad2066@gmail.com";      
+    const adminEmail = "salmaghanem146@gmail.com";      
     sendEmail(
       adminEmail,
       "New Remote Work Request",
