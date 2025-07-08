@@ -29,7 +29,7 @@ export const createRemoteWorkRequest = async (req, res) => {
       📝 Reason: ${reason || "No reason provided."}
 
       Best regards,
-      HR System
+      HR Salma Ghanem
     `;
 
     sendEmail(req.user.email, "Remote Work Request Submitted", messageBody);
@@ -69,7 +69,7 @@ export const approveRemoteWork = async (req, res) => {
     Status: ${emailStatusText}
 
     Best regards,  
-    HR System
+    HR Salma Ghanem
   `;
   sendEmail(request.userId.email, "Remote Work Request Status Update", messageBody);
 
@@ -95,7 +95,7 @@ export const rejectRemoteWork = async (req, res) => {
     Status: ${emailStatusText}
 
     Best regards,  
-    HR Aya Mohamed 
+    HR Salma Ghanem 
   `;
   sendEmail(request.userId.email, "Remote Work Request Status Update", messageBody);
 

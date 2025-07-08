@@ -60,7 +60,7 @@ export const createLeaveRequest = async (req, res) => {
       📝 Reason: ${reason || "No reason provided."}
 
       Best regards,
-      HR System
+      HR Salma Ghanem
     `;
     sendEmail(user.email, "Leave Request Submitted", userMessageBody);
 
@@ -159,7 +159,7 @@ export const updateLeaveRequestStatus = async (req, res) => {
     Status: ${emailStatusText}
     
     Best regards,
-    HR Aya Mohamed
+    HR Salma Ghanem
     `;
     
     sendEmail(user.email, "Leave Request Status Update", messageBody);
